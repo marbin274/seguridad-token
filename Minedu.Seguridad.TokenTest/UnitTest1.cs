@@ -7,7 +7,7 @@ namespace StringLibraryTest
     [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
+        /*[TestMethod]
         public void TestStartsWithUpper()
         {
             // Tests that we expect to return true.
@@ -48,6 +48,6 @@ namespace StringLibraryTest
                        String.Format("Expected for '{0}': false; Actual: {1}",
                                      word == null ? "<null>" : word, result));
             }
-        }
+        }*/
     }
 }

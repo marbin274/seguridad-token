@@ -1,31 +1,51 @@
 using Microsoft.IdentityModel.Tokens;
-using Minedu.Seguridad.Token.Extensions;
-using Minedu.Seguridad.Token.JWT.Interfaces;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 
 namespace Minedu.Seguridad.Token.JWT
 {
-    public class Handler: IHandler
+    public abstract class Handler
     {
-        private readonly ExternalClientJsonConfiguration _settings;
-        public Handler(ExternalClientJsonConfiguration setting)
+        private string _securityAlgorithm;
+        private SecurityKey _securityKey;
+        private ClientJsonConfiguration _settings;
+        private TimeSpan TimeToExpireToken = new TimeSpan(0, 1, 0);
+        private ClientJsonOptions _options = new ClientJsonOptions()
         {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+        };
+
+        protected void init(string securityAlgorithm, ClientJsonConfiguration setting, ClientJsonOptions options = null)
+        {
+            _securityAlgorithm = securityAlgorithm;
             _settings = setting;
+            
+            if (setting.TimeToExpireToken.TotalSeconds > 0)
+            {
+                TimeToExpireToken = setting.TimeToExpireToken;
+            }
+
+            if (options != null)
+            {
+                _options = options;
+            }
         }
 
-        public JwtResponse CreateToken(JwtCustomClaims claims)
+        protected Handler SecurityKey(SecurityKey securityKey)
         {
-            var privateKey = _settings.RsaPrivateKey.ToByteArray();
+            _securityKey = securityKey;
+            return this;
+        }
 
-            using RSA rsa = RSA.Create();
-            rsa.ImportRSAPrivateKey(privateKey, out _);
-
-            var signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256)
+        protected JwtResponse Create(JwtCustomClaims claims)
+        {
+            var signingCredentials = new SigningCredentials(_securityKey, _securityAlgorithm)
             {
-                CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false }
+                CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = _options.CacheSignatureProviders }
             };
 
             var now = DateTime.Now;
@@ -44,8 +64,7 @@ namespace Minedu.Seguridad.Token.JWT
 
                 },
                 notBefore: now,
-                //expires: now.AddMinutes(86400),
-                expires: now.AddMinutes(1),
+                expires: now.Add(TimeToExpireToken),
                 signingCredentials: signingCredentials
             );
 
@@ -58,14 +77,8 @@ namespace Minedu.Seguridad.Token.JWT
             };
         }
 
-        public bool ValidateToken(string token)
+        protected bool Validate(string token)
         {
-
-            var publicKey = _settings.RsaPublicKey.ToByteArray();
-
-            using RSA rsa = RSA.Create();
-            rsa.ImportSubjectPublicKeyInfo(publicKey, out _);
-
             var validationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
@@ -74,11 +87,11 @@ namespace Minedu.Seguridad.Token.JWT
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = _settings.Issuer,
                 ValidAudience = _settings.Audience,
-                IssuerSigningKey = new RsaSecurityKey(rsa),
+                IssuerSigningKey = _securityKey,
 
                 CryptoProviderFactory = new CryptoProviderFactory()
                 {
-                    CacheSignatureProviders = false
+                    CacheSignatureProviders = _options.CacheSignatureProviders
                 }
             };
             SecurityToken validatedToken = null;
@@ -87,16 +100,13 @@ namespace Minedu.Seguridad.Token.JWT
                 var handler = new JwtSecurityTokenHandler();
                 handler.ValidateToken(token, validationParameters, out validatedToken);
             }
-            catch 
+            catch
             {
                 return false;
             }
 
             return true;
         }
-
-        public string GenerateLink(string token) =>
-             $"{_settings.ReferralUrl}/{_settings.ReferralId}/foo?token={token}";
 
     }
 }

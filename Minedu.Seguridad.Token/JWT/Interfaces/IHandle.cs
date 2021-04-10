@@ -4,6 +4,5 @@ namespace Minedu.Seguridad.Token.JWT.Interfaces
     {
         JwtResponse CreateToken(JwtCustomClaims claims);
         bool ValidateToken(string token);
-        string GenerateLink(string token);
     }
 }
