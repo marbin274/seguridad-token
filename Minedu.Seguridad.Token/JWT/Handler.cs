@@ -1,8 +1,9 @@
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
-
 namespace Minedu.Seguridad.Token.JWT
 {
     public abstract class Handler
@@ -10,7 +11,6 @@ namespace Minedu.Seguridad.Token.JWT
         private string _securityAlgorithm;
         private SecurityKey _securityKey;
         private ClientJsonConfiguration _settings;
-        private TimeSpan TimeToExpireToken = new TimeSpan(0, 1, 0);
         private ClientJsonOptions _options = new ClientJsonOptions()
         {
             ValidateAudience = true,
@@ -22,12 +22,12 @@ namespace Minedu.Seguridad.Token.JWT
         protected void init(string securityAlgorithm, ClientJsonConfiguration setting, ClientJsonOptions options = null)
         {
             _securityAlgorithm = securityAlgorithm;
-            _settings = setting;
             
-            if (setting.TimeToExpireToken.TotalSeconds > 0)
+            if (setting.TimeToExpireToken.TotalSeconds <= 0)
             {
-                TimeToExpireToken = setting.TimeToExpireToken;
+                setting.TimeToExpireToken = new TimeSpan(0, 1, 0);
             }
+            _settings = setting;
 
             if (options != null)
             {
@@ -41,7 +41,7 @@ namespace Minedu.Seguridad.Token.JWT
             return this;
         }
 
-        protected JwtResponse Create(JwtCustomClaims claims)
+        protected JwtResponse Create(object claims)
         {
             var signingCredentials = new SigningCredentials(_securityKey, _securityAlgorithm)
             {
@@ -50,24 +50,25 @@ namespace Minedu.Seguridad.Token.JWT
 
             var now = DateTime.Now;
             var unixTimeSeconds = new DateTimeOffset(now).ToUnixTimeSeconds();
+            List<Claim> claimsArray  = new List<Claim> {
+                    new Claim(JwtRegisteredClaimNames.Iat, unixTimeSeconds.ToString(), ClaimValueTypes.Integer64),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+            List<Claim> customClaim = new List<Claim>();
+
+            foreach (PropertyInfo property  in claims.GetType().GetProperties())
+            {
+                claimsArray.Add(new Claim(property.Name, property.GetValue(claims, null).ToString()));
+            }
 
             var jwt = new JwtSecurityToken(
                 audience: _settings.Audience,
                 issuer: _settings.Issuer,
-                claims: new Claim[] {
-                    new Claim(JwtRegisteredClaimNames.Iat, unixTimeSeconds.ToString(), ClaimValueTypes.Integer64),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(nameof(claims.FirstName), claims.FirstName),
-                    new Claim(nameof(claims.LastName), claims.LastName),
-                    new Claim(nameof(claims.Email), claims.Email),
-                    new Claim(nameof(claims.agw), claims.agw)
-
-                },
+                claims: claimsArray,
                 notBefore: now,
-                expires: now.Add(TimeToExpireToken),
+                expires: now.Add(_settings.TimeToExpireToken),
                 signingCredentials: signingCredentials
             );
-
             string token = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             return new JwtResponse

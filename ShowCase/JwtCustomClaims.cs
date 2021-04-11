@@ -1,4 +1,4 @@
-namespace Minedu.Seguridad.Token.JWT
+namespace ShowCase.Models
 {
     public class JwtCustomClaims
     {

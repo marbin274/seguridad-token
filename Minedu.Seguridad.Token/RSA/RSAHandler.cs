@@ -17,7 +17,7 @@ namespace Minedu.Seguridad.Token.RSA
             init(SecurityAlgorithms.RsaSha256, setting, options);
         }
 
-        public JwtResponse CreateToken(JwtCustomClaims claims)
+        public JwtResponse CreateToken(object claims)
         {
             using Cryptography.RSA rsa = Cryptography.RSA.Create();
             rsa.ImportRSAPrivateKey(_privateKey, out _);

@@ -3,6 +3,7 @@ using Minedu.Seguridad.Token;
 using Minedu.Seguridad.Token.JWT.Interfaces;
 using Minedu.Seguridad.Token.JWT;
 using Minedu.Seguridad.Token.RSA;
+using ShowCase.Models;
 
 class Program
 {
@@ -12,16 +13,16 @@ class Program
         string RsaPublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCPu0YVVliBAOCK2TUrkByzfG2FZUl/GpzfQ1OAaCMrO6ack5HOnnIl/mK9Sy7ZveMhgGyZE4Yg2F0w9WaxUR61xRW8VUFrwMqtPow7tUCRNOijejIIn8pA6Svu4ULjQg0NT3SOG8PqKkBKzfURcFbasm5ikL2m8Jw4MgUz6ubovwIDAQAB";
         ClientJsonConfiguration config = new ClientJsonConfiguration()
         {
-            Audience = "a",
-            Issuer = "ab",
+            Audience = "You",
+            Issuer = "Me",
         };
         IHandler handler = new RSAHandler(RsaPrivateKey, RsaPublicKey, config);
         var claims = new JwtCustomClaims()
         {
             agw = "agw",
-            Email = "email",
-            FirstName = "first name",
-            LastName = "lasName"
+            Email = "prueba.56@minedu.gob.pe",
+            FirstName = "Sergio",
+            LastName = "Cardenas"
         };
         JwtResponse token = handler.CreateToken(claims);
         Console.WriteLine($"Token: {token}");
