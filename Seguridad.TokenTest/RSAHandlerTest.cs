@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Minedu.Seguridad.Token.JWT;
-using Minedu.Seguridad.Token.JWT.Interfaces;
-using Minedu.Seguridad.Token.RSA;
+using Seguridad.Token.JWT;
+using Seguridad.Token.JWT.Interfaces;
+using Seguridad.Token.RSA;
 
 namespace StringLibraryTest
 {

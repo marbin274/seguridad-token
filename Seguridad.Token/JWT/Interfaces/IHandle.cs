@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Minedu.Seguridad.Token.JWT.Interfaces
+namespace Seguridad.Token.JWT.Interfaces
 {
     public interface IHandler
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Minedu.Seguridad.Token
+namespace Seguridad.Token
 {
     public class ClientJsonConfiguration
     {

@@ -1,5 +1,5 @@
 
-using Minedu.Seguridad.Token;
+using Seguridad.Token;
 
 namespace StringLibraryTest
 {

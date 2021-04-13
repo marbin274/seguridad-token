@@ -1,11 +1,11 @@
 using Cryptography = System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
-using Minedu.Seguridad.Token.Extensions;
-using Minedu.Seguridad.Token.JWT;
-using Minedu.Seguridad.Token.JWT.Interfaces;
+using Seguridad.Token.Extensions;
+using Seguridad.Token.JWT;
+using Seguridad.Token.JWT.Interfaces;
 using System.Collections.Generic;
 
-namespace Minedu.Seguridad.Token.RSA
+namespace Seguridad.Token.RSA
 {
     public class RSAHandler : Handler, IHandler
     {

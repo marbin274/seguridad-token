@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Security.Claims;
-namespace Minedu.Seguridad.Token.JWT
+namespace Seguridad.Token.JWT
 {
     public abstract class Handler
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using Minedu.Seguridad.Token;
-using Minedu.Seguridad.Token.JWT.Interfaces;
-using Minedu.Seguridad.Token.JWT;
-using Minedu.Seguridad.Token.RSA;
+using Seguridad.Token;
+using Seguridad.Token.JWT.Interfaces;
+using Seguridad.Token.JWT;
+using Seguridad.Token.RSA;
 using ShowCase.Models;
 using System.Collections.Generic;
 

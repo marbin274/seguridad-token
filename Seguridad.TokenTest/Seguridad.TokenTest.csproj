@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Minedu.Seguridad.Token\Minedu.Seguridad.Token.csproj" />
+    <ProjectReference Include="..\Seguridad.Token\Seguridad.Token.csproj" />
   </ItemGroup>
 
 </Project>

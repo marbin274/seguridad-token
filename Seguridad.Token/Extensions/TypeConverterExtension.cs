@@ -1,6 +1,6 @@
 using System;
 
-namespace Minedu.Seguridad.Token.Extensions
+namespace Seguridad.Token.Extensions
 {
     public static class TypeConverterExtension
     {

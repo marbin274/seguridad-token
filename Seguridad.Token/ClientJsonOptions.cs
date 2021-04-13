@@ -1,5 +1,5 @@
 
-namespace Minedu.Seguridad.Token
+namespace Seguridad.Token
 {
     public class ClientJsonOptions
     {

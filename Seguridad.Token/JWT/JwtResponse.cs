@@ -1,4 +1,4 @@
-namespace Minedu.Seguridad.Token.JWT
+namespace Seguridad.Token.JWT
 {
     public class JwtResponse
     {
