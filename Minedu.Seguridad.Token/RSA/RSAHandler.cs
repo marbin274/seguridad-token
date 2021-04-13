@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Minedu.Seguridad.Token.Extensions;
 using Minedu.Seguridad.Token.JWT;
 using Minedu.Seguridad.Token.JWT.Interfaces;
+using System.Collections.Generic;
 
 namespace Minedu.Seguridad.Token.RSA
 {
@@ -26,13 +27,14 @@ namespace Minedu.Seguridad.Token.RSA
             return Create(claims);
         }
 
-        public bool ValidateToken(string token)
+        public bool ValidateToken(string token, out Dictionary<string, object> payload)
         {
             using Cryptography.RSA rsa = Cryptography.RSA.Create();
             rsa.ImportSubjectPublicKeyInfo(_publicKey, out _);
             SecurityKey securityKey = new RsaSecurityKey(rsa);
             SecurityKey(securityKey);
-            return Validate(token);
+            var asd = Validate(token, out payload);
+            return asd;
         }
     }
 

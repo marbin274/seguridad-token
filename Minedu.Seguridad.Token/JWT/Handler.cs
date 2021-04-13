@@ -22,7 +22,7 @@ namespace Minedu.Seguridad.Token.JWT
         protected void init(string securityAlgorithm, ClientJsonConfiguration setting, ClientJsonOptions options = null)
         {
             _securityAlgorithm = securityAlgorithm;
-            
+
             if (setting.TimeToExpireToken.TotalSeconds <= 0)
             {
                 setting.TimeToExpireToken = new TimeSpan(0, 1, 0);
@@ -50,13 +50,13 @@ namespace Minedu.Seguridad.Token.JWT
 
             var now = DateTime.Now;
             var unixTimeSeconds = new DateTimeOffset(now).ToUnixTimeSeconds();
-            List<Claim> claimsArray  = new List<Claim> {
+            List<Claim> claimsArray = new List<Claim> {
                     new Claim(JwtRegisteredClaimNames.Iat, unixTimeSeconds.ToString(), ClaimValueTypes.Integer64),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
             List<Claim> customClaim = new List<Claim>();
-
-            foreach (PropertyInfo property  in claims.GetType().GetProperties())
+            var props = claims.GetType().GetProperties();
+            foreach (PropertyInfo property in props)
             {
                 claimsArray.Add(new Claim(property.Name, property.GetValue(claims, null).ToString()));
             }
@@ -78,7 +78,7 @@ namespace Minedu.Seguridad.Token.JWT
             };
         }
 
-        protected bool Validate(string token)
+        protected bool Validate(string token, out Dictionary<string, object> payload)
         {
             var validationParameters = new TokenValidationParameters
             {
@@ -95,19 +95,19 @@ namespace Minedu.Seguridad.Token.JWT
                     CacheSignatureProviders = _options.CacheSignatureProviders
                 }
             };
-            SecurityToken validatedToken = null;
             try
             {
                 var handler = new JwtSecurityTokenHandler();
-                handler.ValidateToken(token, validationParameters, out validatedToken);
+                handler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+                payload = ((Dictionary<string, object>)((JwtSecurityToken)validatedToken).Payload);
+                
+                return true;
             }
             catch
             {
+                payload = null;
                 return false;
             }
-
-            return true;
         }
-
     }
 }

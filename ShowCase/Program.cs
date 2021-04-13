@@ -4,6 +4,7 @@ using Minedu.Seguridad.Token.JWT.Interfaces;
 using Minedu.Seguridad.Token.JWT;
 using Minedu.Seguridad.Token.RSA;
 using ShowCase.Models;
+using System.Collections.Generic;
 
 class Program
 {
@@ -24,9 +25,9 @@ class Program
             FirstName = "Sergio",
             LastName = "Cardenas"
         };
-        JwtResponse token = handler.CreateToken(claims);
-        Console.WriteLine($"Token: {token}");
-        bool isTokenValid = handler.ValidateToken(token.Token);
+        JwtResponse response = handler.CreateToken(claims);
+        Console.WriteLine($"Token: {response}");
+        bool isTokenValid = handler.ValidateToken(response.Token, out Dictionary<string, object> payload);
         Console.WriteLine($"isValid: {isTokenValid}");
     }
 }
