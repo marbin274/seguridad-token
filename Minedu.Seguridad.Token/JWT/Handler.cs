@@ -82,10 +82,10 @@ namespace Minedu.Seguridad.Token.JWT
         {
             var validationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
+                ValidateIssuer = _options.ValidateIssuer,
+                ValidateAudience = _options.ValidateAudience,
+                ValidateLifetime = _options.ValidateLifetime,
+                ValidateIssuerSigningKey = _options.ValidateIssuerSigningKey,
                 ValidIssuer = _settings.Issuer,
                 ValidAudience = _settings.Audience,
                 IssuerSigningKey = _securityKey,
