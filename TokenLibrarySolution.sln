@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minedu.Seguridad.Token", "Minedu.Seguridad.Token\Minedu.Seguridad.Token.csproj", "{E977291C-DAD8-4900-B9D4-77F4DB76C132}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seguridad.Token", "Seguridad.Token\Seguridad.Token.csproj", "{E977291C-DAD8-4900-B9D4-77F4DB76C132}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowCase", "ShowCase\ShowCase.csproj", "{DA05A446-010D-4B21-ABDE-2389BAA24755}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minedu.Seguridad.TokenTest", "Minedu.Seguridad.TokenTest\Minedu.Seguridad.TokenTest.csproj", "{9BD2B7C9-26E1-4A50-885C-B16B23734FD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seguridad.TokenTest", "Seguridad.TokenTest\Seguridad.TokenTest.csproj", "{9BD2B7C9-26E1-4A50-885C-B16B23734FD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
